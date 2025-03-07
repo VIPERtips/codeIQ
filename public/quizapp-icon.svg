@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Definitions -->
+  <defs>
+    <linearGradient id="bubbleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4361EE" />
+      <stop offset="100%" stop-color="#7209B7" />
+    </linearGradient>
+    <linearGradient id="questionGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFC300" />
+      <stop offset="100%" stop-color="#FF5733" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Speech Bubble -->
+  <path d="M165 100 C165 138 135 168 98 168 L78 168 C41 168 11 138 11 100 C11 62 41 32 78 32 L98 32 C135 32 165 62 165 100 Z M78 168 L60 190 L68 168" fill="url(#bubbleGradient)" />
+  
+  <!-- Question Mark -->
+  <path d="M78 58 C78 58 65 58 65 72 C65 82 75 85 75 95 C75 102 75 105 75 105 L100 105 C100 105 100 102 100 95 C100 85 110 82 110 72 C110 58 97 58 97 58 Z" fill="url(#questionGradient)" />
+  <circle cx="88" cy="120" r="10" fill="url(#questionGradient)" />
+  
+  <!-- Subtle Light Flare -->
+  <circle cx="45" cy="60" r="6" fill="white" opacity="0.3" />
+</svg>
