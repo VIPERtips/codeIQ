@@ -52,7 +52,7 @@ const QuizPage: React.FC<QuizPageProps> = ({
     if (showResult) {
       const username = localStorage.getItem("username");
       if (username) {
-        fetch("http://localhost:8080/api/users/score", {
+        fetch("https://codeiq-backend.onrender.com/api/users/score", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username: username, score: score }),

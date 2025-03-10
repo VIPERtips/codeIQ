@@ -22,7 +22,7 @@ const handleSubmit = async (e: React.FormEvent)=>{
   setError(null);
 
   try {
-    const response = await fetch (`http://localhost:8080/api/users?username=${encodeURIComponent(username)}`);
+    const response = await fetch (`https://codeiq-backend.onrender.com/api/users?username=${encodeURIComponent(username)}`);
     if(!response.ok){
       throw new Error("Failed to fetch data");
     }
