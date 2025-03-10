@@ -2,9 +2,9 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'QuizApp - Challenge Your Knowledge',
+  title: 'CodeIQ - Challenge Your Knowledge',
   description:
-    "Test your programming skills with QuizApp. Dive into a fun, interactive quiz experience brought to you by Tadiwa Blessed.",
+    "Test your programming skills with CodeIQ. Dive into a fun, interactive quiz experience brought to you by Tadiwa Blessed.",
 }
 
 export default function RootLayout({

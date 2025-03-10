@@ -41,7 +41,7 @@ const Category: React.FC<CategoryProps> = ({ onStartQuiz }) => {
   };
 
   return (
-    <section id="category" className="py-20 bg-gray-100 dark:bg-gray-800">
+    <section id="quiz" className="py-20 bg-gray-100 dark:bg-gray-800">
       <div className="container mx-auto px-6">
         <h2 className="text-3xl font-bold text-center mb-8 text-gray-800 dark:text-white flex items-center justify-center">
           <Code className="mr-2 w-8 h-8 text-blue-500" /> {/* Icon for the category */}
