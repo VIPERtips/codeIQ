@@ -1,21 +1,33 @@
-import type { Metadata } from 'next'
-import './globals.css'
+'use client';  // Add this directive for client-side logic
 
-export const metadata: Metadata = {
-  title: 'CodeIQ - Challenge Your Knowledge',
-  description:
-    "Test your programming skills with CodeIQ. Dive into a fun, interactive quiz experience brought to you by Tadiwa Blessed.",
-}
+import { useEffect } from 'react';
+import { metadata } from './metadata';  // Import metadata
+import './globals.css';
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
+  useEffect(() => {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/service-worker.js')
+        .then((registration) => {
+          console.log('Service Worker registered:', registration);
+        })
+        .catch((error) => {
+          console.error('Service Worker registration failed:', error);
+        });
+    }
+  }, []);
+
   return (
     <html lang="en">
       <head>
-      <link
+        <title>{metadata.title}</title> {/* Use metadata for title */}
+        <meta name="description" content={metadata.description} /> {/* Use metadata for description */}
+        <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
         />
@@ -23,5 +35,5 @@ export default function RootLayout({
       </head>
       <body>{children}</body>
     </html>
-  )
+  );
 }
