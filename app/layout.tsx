@@ -32,6 +32,7 @@ export default function RootLayout({
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
         />
         <link rel="icon" href="/quizapp-icon.svg" />
+        <link rel="manifest" href="/manifest.json" />
       </head>
       <body>{children}</body>
     </html>
