@@ -41,7 +41,7 @@ export default function Home() {
       <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-300">
         <Header />
         <main className="flex-1">
-          {username && <UsernameModal onUsernameSet={setUsername} />}
+          {!username && <UsernameModal onUsernameSet={setUsername} />}
           {selectedLanguage ? (
             <QuizPage
               language={selectedLanguage}

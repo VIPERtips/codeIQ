@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { quizData } from "./QuizData";
@@ -45,6 +47,7 @@ const QuizPage: React.FC<QuizPageProps> = ({
     }
   }, [language]);
 
+  // Submit score automatically after quiz finishes or exit is confirmed
   useEffect(() => {
     if (showResult) {
       const username = localStorage.getItem("username");
@@ -74,22 +77,17 @@ const QuizPage: React.FC<QuizPageProps> = ({
   }, [showResult, score, onScoreSubmitted]);
 
   const handleAnswer = (answer: string): void => {
-    // Determine if the answer is correct
-    const currentQuiz = questions[currentQuestion];
-    const isCorrect = currentQuiz && answer === currentQuiz.correctAnswer;
-
-    // Play sound based on answer correctness
-    if (isCorrect) {
-      new Audio("/sounds/correct.mp3").play();
-      setScore((prevScore) => prevScore + 1);
-    } else {
-      new Audio("/sounds/wrong.mp3").play();
-    }
-
     setUserAnswers((prev) => [
       ...prev,
       { questionIndex: currentQuestion, selectedAnswer: answer },
     ]);
+
+    if (
+      questions[currentQuestion] &&
+      answer === questions[currentQuestion].correctAnswer
+    ) {
+      setScore((prevScore) => prevScore + 1);
+    }
 
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion((prev) => prev + 1);
@@ -111,8 +109,6 @@ const QuizPage: React.FC<QuizPageProps> = ({
     setShowResult(true);
     setShowConfirmExit(false);
   };
-
-  const progress = (currentQuestion / questions.length) * 100;
 
   if (!language) {
     return <div className="text-center">Loading...</div>;
@@ -203,24 +199,20 @@ const QuizPage: React.FC<QuizPageProps> = ({
               {questions[currentQuestion].question}
             </h2>
             <ul className="flex flex-col items-center mb-6">
-              {questions[currentQuestion].answers.map((answer, index) => (
-                <li key={index} className="mb-4">
-                  <button
-                    onClick={() => handleAnswer(answer)}
-                    className="w-64 h-20 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded flex items-center justify-center text-center px-4"
-                  >
-                    {answer}
-                  </button>
-                </li>
-              ))}
+              {questions[currentQuestion].answers.map(
+                (answer, index) => (
+                  <li key={index} className="mb-4">
+                    <button
+                      onClick={() => handleAnswer(answer)}
+                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      {answer}
+                    </button>
+                  </li>
+                )
+              )}
             </ul>
-
-            <div className="w-full bg-gray-300 h-2 mb-4 rounded">
-              <div
-                style={{ width: `${progress}%` }}
-                className="bg-blue-500 h-2"
-              ></div>
-            </div>
+            <p className="text-lg mb-6">Score: {score}</p>
           </div>
         ) : (
           <div className="text-center">
@@ -229,6 +221,7 @@ const QuizPage: React.FC<QuizPageProps> = ({
         )}
       </motion.div>
 
+      {/* Exit Confirmation Modal */}
       {showConfirmExit && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <motion.div
