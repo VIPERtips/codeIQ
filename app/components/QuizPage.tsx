@@ -32,6 +32,7 @@ const QuizPage: React.FC<QuizPageProps> = ({
   const [showResult, setShowResult] = useState<boolean>(false);
   const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   const [showConfirmExit, setShowConfirmExit] = useState<boolean>(false);
+  const [scoreSubmitted, setScoreSubmitted] = useState<boolean>(false);
 
   useEffect(() => {
     if (language) {
@@ -46,7 +47,7 @@ const QuizPage: React.FC<QuizPageProps> = ({
   }, [language]);
 
   useEffect(() => {
-    if (showResult) {
+    if (showResult && !scoreSubmitted) {
       const username = localStorage.getItem("username");
       if (username) {
         fetch("https://codeiq-backend.onrender.com/api/users/score", {
@@ -65,16 +66,16 @@ const QuizPage: React.FC<QuizPageProps> = ({
             if (onScoreSubmitted) {
               onScoreSubmitted();
             }
+            setScoreSubmitted(true);
           })
           .catch((error) =>
             console.error("Error submitting score:", error)
           );
       }
     }
-  }, [showResult, score, onScoreSubmitted]);
+  }, [showResult, score, onScoreSubmitted, scoreSubmitted]);
 
   const handleAnswer = (answer: string): void => {
-    // Determine if the answer is correct
     const currentQuiz = questions[currentQuestion];
     const isCorrect = currentQuiz && answer === currentQuiz.correctAnswer;
 
@@ -102,12 +103,12 @@ const QuizPage: React.FC<QuizPageProps> = ({
     setCurrentQuestion(0);
     setScore(0);
     setShowResult(false);
+    setScoreSubmitted(false);
     setUserAnswers([]);
     setQuestions((prev) => [...prev].sort(() => Math.random() - 0.5));
   };
 
   const confirmExitSubmit = (): void => {
-    // Trigger score submission and exit quiz
     setShowResult(true);
     setShowConfirmExit(false);
   };
@@ -160,10 +161,7 @@ const QuizPage: React.FC<QuizPageProps> = ({
                       question.correctAnswer !== ua.selectedAnswer
                     ) {
                       return (
-                        <li
-                          key={index}
-                          className="border p-4 rounded"
-                        >
+                        <li key={index} className="border p-4 rounded">
                           <p>
                             <strong>Question:</strong>{" "}
                             {question.question}
