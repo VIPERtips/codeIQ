@@ -1,6 +1,6 @@
 "use client";
 
-import { Trophy, ChevronLeft, ChevronRight, Loader } from "lucide-react";
+import { Trophy, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 
@@ -14,14 +14,12 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ refresh = 0 }) => {
   >([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true); // Track loading state
 
   useEffect(() => {
     const fetchLeaderBoard = async () => {
-      setLoading(true); // Start loading before fetching
       try {
         const response = await fetch(
-          `https://codeiq-backend.onrender.com/api/users/all-scores?page=${page}&size=5`
+          `http://localhost:8080/api/users/all-scores?page=${page}&size=5`
         );
         const data = await response.json();
         const formattedData = data.content.map(
@@ -35,8 +33,6 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ refresh = 0 }) => {
         setTotalPages(data.totalPages);
       } catch (error) {
         console.error("Error fetching leaderboard: ", error);
-      } finally {
-        setLoading(false); // End loading once data is fetched
       }
     };
     fetchLeaderBoard();
@@ -57,12 +53,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ refresh = 0 }) => {
           </h2>
         </div>
         <div className="bg-gray-100 dark:bg-gray-800 rounded-lg shadow p-6">
-          {loading ? (
-            // Show spinner while loading data
-            <div className="flex justify-center items-center py-8">
-             <Loader className="animate-spin mr-2 w-10 h-10 " />
-            </div>
-          ) : leaderboardData.length > 0 ? (
+          {leaderboardData.length > 0 ? (
             leaderboardData.map((player) => (
               <motion.div
                 key={player.rank}
