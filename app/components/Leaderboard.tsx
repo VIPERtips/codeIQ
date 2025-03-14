@@ -19,7 +19,7 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ refresh = 0 }) => {
     const fetchLeaderBoard = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/users/all-scores?page=${page}&size=5`
+          `https://codeiq-backend.onrender.com//api/users/all-scores?page=${page}&size=5`
         );
         const data = await response.json();
         const formattedData = data.content.map(
