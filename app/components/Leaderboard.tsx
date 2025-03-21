@@ -1,5 +1,3 @@
-"use client";
-
 import { Trophy, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
@@ -10,23 +8,26 @@ interface LeaderboardProps {
 
 const Leaderboard: React.FC<LeaderboardProps> = ({ refresh = 0 }) => {
   const [leaderboardData, setLeaderboardData] = useState<
-    { rank: number; name: string; score: number }[]
+    { rank: number; name: string; score: number; language: string }[]
   >([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [selectedLanguage, setSelectedLanguage] = useState<string>(""); // Language filter
 
   useEffect(() => {
     const fetchLeaderBoard = async () => {
       try {
+        const languageQuery = selectedLanguage ? `&language=${selectedLanguage}` : "";
         const response = await fetch(
-          `https://codeiq-backend.onrender.com/api/users/all-scores?page=${page}&size=5`
+          `https://codeiq-backend.onrender.com/api/users/all-scores?page=${page}&size=5${languageQuery}`
         );
         const data = await response.json();
         const formattedData = data.content.map(
-          (item: { user: { username: string }; score: number }, index: number) => ({
+          (item: { user: { username: string }; score: number; language: string }, index: number) => ({
             rank: page * 5 + index + 1,
             name: item.user.username,
             score: item.score,
+            language: item.language, // Store the language of the user
           })
         );
         setLeaderboardData(formattedData);
@@ -36,7 +37,19 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ refresh = 0 }) => {
       }
     };
     fetchLeaderBoard();
-  }, [page, refresh]);
+  }, [page, refresh, selectedLanguage]); // Add selectedLanguage to dependencies
+
+  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedLanguage(event.target.value);
+    setPage(0); // Reset to first page when language changes
+  };
+
+  const languages = [
+    { value: "python", label: "Python" },
+    { value: "java", label: "Java" },
+    { value: "react", label: "React" },
+    { value: "mysql", label: "MySQL" },
+  ];
 
   return (
     <section id="leaderboard" className="py-20 bg-white dark:bg-gray-900">
@@ -52,6 +65,23 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ refresh = 0 }) => {
             Leaderboard
           </h2>
         </div>
+
+        {/* Language selection dropdown */}
+        <div className="mb-6 flex justify-center">
+          <select
+            value={selectedLanguage}
+            onChange={handleLanguageChange}
+            className="px-4 py-2 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-white"
+          >
+            <option value="">All Languages</option>
+            {languages.map((lang) => (
+                  <option key={lang.value} value={lang.value}>
+                    {lang.label}
+                  </option>
+                ))}
+          </select>
+        </div>
+
         <div className="bg-gray-100 dark:bg-gray-800 rounded-lg shadow p-6">
           {leaderboardData.length > 0 ? (
             leaderboardData.map((player) => (
@@ -73,6 +103,8 @@ const Leaderboard: React.FC<LeaderboardProps> = ({ refresh = 0 }) => {
             <p className="text-center text-gray-500">No scores available</p>
           )}
         </div>
+
+        {/* Pagination controls */}
         <div className="flex justify-center mt-6">
           <button
             disabled={page === 0}

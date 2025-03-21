@@ -53,7 +53,7 @@ const QuizPage: React.FC<QuizPageProps> = ({
         fetch("https://codeiq-backend.onrender.com/api/users/score", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username: username, score: score }),
+          body: JSON.stringify({ username: username, score: score,language:language }),
         })
           .then((response) => {
             if (!response.ok) {
@@ -73,7 +73,7 @@ const QuizPage: React.FC<QuizPageProps> = ({
           );
       }
     }
-  }, [showResult, score, onScoreSubmitted, scoreSubmitted]);
+  }, [showResult, score, onScoreSubmitted, scoreSubmitted,language]);
 
   const handleAnswer = (answer: string): void => {
     const currentQuiz = questions[currentQuestion];
